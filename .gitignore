@@ -1,3 +1,36 @@
+# ----------------------------------------
+# OS & Editor
+# ----------------------------------------
+*~                           # backup files
+.*.swp                       # vim swap
+.DS_Store                    # macOS Finder metadata
+
+# ----------------------------------------
+# IDE & Editor folders
+# ----------------------------------------
+/.idea/
+/.vscode/
+/*.iml
+/.classpath
+/.project
+/.ijwb/
+
+# ----------------------------------------
+# Bazel outputs & tooling
+# ----------------------------------------
+/bazel-*
+bazel-bin/
+bazel-genfiles/
+bazel-out/
+bazel-testlogs/
+/output/
+.bazelversion
+user.bazelrc
+
+# ----------------------------------------
+# Go build artifacts
+# ----------------------------------------
+
 # If you prefer the allow list template instead of the deny list, see community template:
 # https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
 #
