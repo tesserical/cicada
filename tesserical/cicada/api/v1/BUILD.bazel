@@ -1,0 +1,34 @@
+load("@rules_go//go:def.bzl", "go_library")
+load("@rules_go//proto:def.bzl", "go_proto_library")
+load("@rules_proto//proto:defs.bzl", "proto_library")
+
+proto_library(
+    name = "cicadaapiv1pb_proto",
+    srcs = [
+        "chat.proto",
+        "device.proto",
+        "message.proto",
+        "user.proto",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_google_protobuf//:empty_proto",
+        "@com_google_protobuf//:field_mask_proto",
+        "@com_google_protobuf//:timestamp_proto",
+    ],
+)
+
+go_proto_library(
+    name = "cicadaapiv1pb_go_proto",
+    compilers = ["@rules_go//proto:go_grpc"],
+    importpath = "github.com/tesserical/cicada/grpc/cicadaapiv1pb",
+    proto = ":cicadaapiv1pb_proto",
+    visibility = ["//visibility:public"],
+)
+
+go_library(
+    name = "cicadaapiv1pb",
+    embed = [":cicadaapiv1pb_go_proto"],
+    importpath = "github.com/tesserical/cicada/grpc/cicadaapiv1pb",
+    visibility = ["//visibility:public"],
+)

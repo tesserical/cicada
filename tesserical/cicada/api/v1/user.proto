@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package tesserical.cicada.api.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/tesserical/cicada/grpc/cicadaapiv1pb";
+
+// -> Resource <-
+
+message User {
+  string id = 1; // The unique identifier for the user.
+  string username = 2; // The username of the user.
+  optional string image_url = 3; // The URL of the user's image.
+  google.protobuf.Timestamp created_at = 4; // The timestamp when the user was created.
+}
+
+// -> Manager <-
+
+service UserManager {
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+  rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse);
+  rpc DeleteUser(DeleteUserRequest) returns (google.protobuf.Empty);
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
+  rpc ChangePassword(ChangePasswordRequest) returns (google.protobuf.Empty);
+  rpc RequestPasswordReset(RequestPasswordResetRequest) returns (google.protobuf.Empty);
+  rpc ResetPassword(ResetPasswordRequest) returns (google.protobuf.Empty);
+}
+
+// --> Request(s) <--
+
+message CreateUserRequest {
+  string username = 1; // The username of the user.
+  string password = 2; // The password of the user.
+  optional string image_url = 3; // The URL of the user's image.
+}
+
+message UpdateUserOperation {
+  string user_id = 1; // The ID of the user to update.
+  string username = 2; // The new username of the user.
+  string image_url = 3; // The new URL of the user's image.
+}
+
+message UpdateUserRequest {
+  UpdateUserOperation operation = 1; // The operation to perform on the user.
+  google.protobuf.FieldMask update_mask = 2; // The fields to update in the user.
+}
+
+message DeleteUserRequest {
+  string user_id = 1; // The ID of the user to delete.
+}
+
+message GetUserRequest {
+  string user_id = 1; // The ID of the user to get.
+}
+
+message ChangePasswordRequest {
+  string user_id = 1; // The ID of the user to change the password for.
+  string old_password = 2; // The old password of the user.
+  string new_password = 3; // The new password for the user.
+}
+
+message RequestPasswordResetRequest {
+  string user_id = 1; // The ID of the user to request a password reset for.
+  string device_id = 2; // The ID of the device to send the password reset token to.
+}
+
+message ResetPasswordRequest {
+  string user_id = 1; // The ID of the user to reset the password for.
+  string new_password = 2; // The new password for the user.
+  string token = 3; // The token for the password reset.
+}
+
+// --> Response(s) <--
+
+message CreateUserResponse {
+  User user = 1; // The created user object.
+}
+
+message UpdateUserResponse {
+  User user = 1; // The created user object.
+}
+
+message GetUserResponse {
+  User user = 1; // The user object.
+}

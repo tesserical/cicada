@@ -1,0 +1,2 @@
+# Fail builds if lockfile is out of date
+common --lockfile_mode=error --enable_bzlmod

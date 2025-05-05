@@ -1,0 +1,7 @@
+# Load Gazelle
+load("@gazelle//:def.bzl", "gazelle")
+
+# gazelle:prefix github.com/tesserical/cicada
+gazelle(
+    name = "gazelle",
+)

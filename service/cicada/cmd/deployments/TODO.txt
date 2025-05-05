@@ -1,0 +1,3 @@
+TODO: To add k8s/helm manifests to deploy cicada service (along its local infra) to k8s. Infra deps:
+    - Apache Cassandra (or ScyllaDB?)
+    - NATS (w Jetstream?)

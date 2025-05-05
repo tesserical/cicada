@@ -1,0 +1,134 @@
+syntax = "proto3";
+
+package tesserical.cicada.api.v1;
+
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/tesserical/cicada/grpc/cicadaapiv1pb";
+
+// -> Resource <-
+
+message Chat {
+  enum Type {
+    CHAT_TYPE_UNSPECIFIED = 0; // The type is not specified.
+    CHAT_TYPE_GROUP = 1; // The chat is a group chat.
+    CHAT_TYPE_DIRECT = 2; // The chat is a direct chat.
+  }
+  string id = 1; // The unique identifier for the chat.
+  string name = 2; // The name of the chat.
+  optional string description = 3; // The description of the chat.
+  repeated string admins = 4; // The IDs of the users who manage the chat.
+  Type chat_type = 5; // The type of the chat. For example, "GROUP", "DIRECT", etc.
+  repeated string members = 6; // The list of members in the chat.
+  optional string image_url = 7; // The URL of the chat image.
+  google.protobuf.Timestamp created_at = 8; // The timestamp when the chat was created.
+}
+
+// -> Manager <-
+
+service ChatManager {
+  rpc CreateChat(CreateChatRequest) returns (CreateChatResponse);
+  rpc UpdateChat(UpdateChatRequest) returns (UpdateChatResponse);
+  rpc DeleteChat(DeleteChatRequest) returns (google.protobuf.Empty);
+  rpc AddMembers(AddMembersRequest) returns (google.protobuf.Empty);
+  rpc RemoveMembers(RemoveMembersRequest) returns (google.protobuf.Empty);
+  rpc PromoteMember(PromoteMemberRequest) returns (google.protobuf.Empty);
+  rpc DemoteMember(DemoteMemberRequest) returns (google.protobuf.Empty);
+}
+
+// --> Request(s) <--
+
+message CreateChatRequest {
+  optional string name = 1; // The name of the chat.
+  repeated string members = 2; // The list of members to add to the chat.
+  optional string description = 3; // The description of the chat.
+}
+
+message UpdateChatOperation {
+  string chat_id = 1; // The ID of the chat to update.
+  string name = 2; // The new name of the chat.
+  string description = 3; // The new description of the chat.
+  string image_url = 4; // The new URL of the chat image.
+}
+
+message UpdateChatRequest {
+  UpdateChatOperation operation = 1; // The operation to perform on the chat.
+  google.protobuf.FieldMask update_mask = 2; // The fields to update in the chat.
+}
+
+message DeleteChatRequest {
+  string chat_id = 1; // The ID of the chat to delete.
+}
+
+message AddMembersRequest {
+  string chat_id = 1; // The ID of the chat to add members to.
+  repeated string members = 2; // The list of members to add to the chat.
+}
+
+message RemoveMembersRequest {
+  string chat_id = 1; // The ID of the chat to remove members from.
+  repeated string members = 2; // The list of members to remove from the chat.
+}
+
+message PromoteMemberRequest {
+  string chat_id = 1; // The ID of the chat to promote a member in.
+  string member_id = 2; // The ID of the member to promote.
+}
+
+message DemoteMemberRequest {
+  string chat_id = 1; // The ID of the chat to demote a member in.
+  string member_id = 2; // The ID of the member to demote.
+}
+
+// --> Response(s) <--
+
+message CreateChatResponse {
+  Chat chat = 1; // The chat object.
+  bytes cipher_key = 2; // The cipher key used to encrypt the chat. Clients must store this in a safe place.
+}
+
+message UpdateChatResponse {
+  Chat chat = 1; // The chat object.
+}
+
+// -> Fetcher <-
+
+service ChatFetcher {
+  rpc GetChatInfo(GetChatInfoRequest) returns (GetChatInfoResponse);
+  rpc ListChats(ListChatsRequest) returns (ListChatsResponse);
+}
+
+// --> Request(s) <--
+
+message GetChatInfoRequest {
+  string chat_id = 1; // The ID of the chat to fetch.
+}
+
+message ListChatsRequest {
+  string user_id = 1; // The ID of the user to fetch chats for.
+  optional string page_token = 2; // Token for the requested page of results.
+}
+
+// --> Response(s) <--
+
+message GetChatInfoResponse {
+  Chat chat = 1; // The chat object.
+}
+
+message ListChatItemPreviewResponse {
+  string chat_id = 1; // The ID of the chat.
+  string name = 2; // The name of the chat.
+  Chat.Type chat_type = 3; // The type of the chat. For example, "GROUP", "DIRECT", etc.
+  optional string image_url = 4; // The URL of the chat image.
+  optional string last_message_by = 5; // The ID of the user who sent the last message.
+  optional bytes last_message = 6; // The last message in the chat.
+  int32 total_unread_messages = 7; // The total number of unread messages in the chat.
+  google.protobuf.Timestamp last_message_time = 8; // The timestamp of the last message.
+}
+
+message ListChatsResponse {
+  repeated ListChatItemPreviewResponse chats = 1; // The list of chat previews.
+  optional string next_page_token = 2; // Token for the next page of results.
+}

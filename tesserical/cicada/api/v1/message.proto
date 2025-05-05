@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package tesserical.cicada.api.v1;
+
+option go_package = "github.com/tesserical/cicada/grpc/cicadaapiv1pb";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+// -> Resource <-
+
+message Message {
+  string id = 1; // The unique identifier for the message.
+  string sender_id = 2; // The ID of the sender.
+  bytes content = 3; // The content of the message. It is encrypted by the sender.
+  google.protobuf.Timestamp send_time = 4; // The timestamp of the message.
+}
+
+// -> Sender <-
+
+service MessageSender {
+  rpc SendMessage(SendMessageRequest) returns (google.protobuf.Empty);
+}
+
+// --> Request(s) <--
+
+message SendMessageRequest {
+  string chat_id = 1; // The ID of the chat to send the message to.
+  Message message = 2; // The message to send.
+}
+
+// -> Fetcher <-
+
+service MessageFetcher {
+  rpc FetchMessages(FetchMessagesRequest) returns (FetchMessagesResponse);
+}
+
+// --> Request(s) <--
+
+message FetchMessagesRequest {
+  string chat_id = 1; // The ID of the chat to fetch messages from.
+  optional string page_token = 2; // The token for the requested page of results.
+}
+
+// --> Response(s) <--
+
+message FetchMessagesResponse {
+  repeated Message messages = 1; // The list of messages in the chat.
+  optional string next_page_token = 2; // The token for the next page of results.
+}

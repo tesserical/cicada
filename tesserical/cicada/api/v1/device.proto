@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package tesserical.cicada.api.v1;
+
+option go_package = "github.com/tesserical/tesserical/shared/lib/go/internalapi/cicadav1pb";
+
+import "google/protobuf/empty.proto";
+
+// -> Resource <-
+
+message Device {
+  enum Type {
+    DEVICE_TYPE_UNSPECIFIED = 0; // The type is not specified.
+    DEVICE_TYPE_MOBILE = 1; // The device is a mobile device.
+    DEVICE_TYPE_DESKTOP = 2; // The device is a desktop device.
+  }
+  string id = 1; // The unique identifier for the device.
+  string user_id = 2; // The unique identifier for the user who owns the device.
+  Type device_type = 3; // The type of the device (e.g., "mobile", "desktop").
+  string device_token = 4; // The token used for push notifications.
+  bool push_notifications_enabled = 5; // Whether push notifications are enabled for this device.
+}
+
+// -> Manager <-
+
+service DeviceManager {
+  rpc RegisterDevice(RegisterDeviceRequest) returns (RegisterDeviceResponse);
+  rpc UnregisterDevice(UnregisterDeviceRequest) returns (google.protobuf.Empty);
+  rpc DisableDevicePushNotifications(DisableDevicePushNotificationsRequest) returns (google.protobuf.Empty);
+  rpc EnableDevicePushNotifications(EnableDevicePushNotificationsRequest) returns (google.protobuf.Empty);
+  rpc ListDevices(ListDevicesRequest) returns (ListDevicesResponse);
+}
+
+// --> Request(s) <--
+
+message RegisterDeviceRequest {
+  string device_id = 1; // The unique identifier for the device.
+  string user_id = 2; // The unique identifier for the user who owns the device.
+  string device_type = 3; // The type of the device (e.g., "mobile", "desktop").
+  string device_token = 4; // The token used for push notifications.
+}
+
+message UnregisterDeviceRequest {
+  string device_id = 1; // The unique identifier for the device.
+  string user_id = 2; // The unique identifier for the user who owns the device.
+}
+
+message EnableDevicePushNotificationsRequest {
+  string device_id = 1; // The unique identifier for the device.
+  string user_id = 2; // The unique identifier for the user who owns the device.
+}
+
+message DisableDevicePushNotificationsRequest {
+  string device_id = 1; // The unique identifier for the device.
+  string user_id = 2; // The unique identifier for the user who owns the device.
+}
+
+message ListDevicesRequest {
+  string user_id = 1; // The unique identifier for the user whose devices are to be listed.
+  optional string page_token = 2; // Token for the requested page of results.
+}
+
+// --> Response(s) <--
+
+message RegisterDeviceResponse {
+  string device_id = 1; // The unique identifier for the device.
+}
+
+message ListDevicesResponse {
+  repeated Device devices = 1; // The list of devices.
+  optional string next_page_token = 2; // Token for the next page of results.
+}
