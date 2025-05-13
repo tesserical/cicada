@@ -1,0 +1,23 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: nats
+
+deploy:
+  helm:
+    releases:
+      - name: nats
+        remoteChart: nats
+        namespace: cicada
+        createNamespace: true
+        repo: https://nats-io.github.io/k8s/helm/charts/
+        version: 1.3.6
+        valuesFiles: []
+
+profiles:
+  - name: local
+    patches:
+      - op: add
+        path: /deploy/helm/releases/0/valuesFiles
+        value:
+          - deployments/env/local/values.yaml

@@ -1,0 +1,9 @@
+config:
+  cluster:
+    enabled: true
+    replicas: 2
+    routeURLs:
+      user: cicada
+      password: some-password
+  jetstream:
+    enabled: true

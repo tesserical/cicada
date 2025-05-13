@@ -1,0 +1,14 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+
+metadata:
+  name: cicada
+
+requires:
+  - path: service/shared/nats
+#  - path: service/chat
+
+profiles:
+  - name: local
+    activation:
+      - kubeContext: microk8s
