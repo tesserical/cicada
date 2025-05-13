@@ -6,7 +6,7 @@ metadata:
 
 requires:
   - path: service/shared/nats
-#  - path: service/chat
+  - path: service/chat
 
 profiles:
   - name: local

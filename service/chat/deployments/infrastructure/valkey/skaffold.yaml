@@ -1,0 +1,25 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: chat-valkey
+
+requires:
+  - path: deps
+
+deploy:
+  helm:
+    releases:
+      - name: chat-valkey
+        remoteChart: oci://registry-1.docker.io/bitnamicharts/valkey
+        namespace: cicada
+        createNamespace: true
+        version: 3.0.4
+        valuesFiles: []
+
+profiles:
+  - name: local
+    patches:
+      - op: add
+        path: /deploy/helm/releases/0/valuesFiles
+        value:
+          - deployments/env/local/values.yaml

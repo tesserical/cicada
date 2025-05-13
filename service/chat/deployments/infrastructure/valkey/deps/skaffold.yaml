@@ -1,0 +1,12 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: valkey-deps
+
+profiles:
+  - name: local
+    manifests:
+      rawYaml:
+        - "deployments/env/local/extras/*"
+    deploy:
+      kubectl: {}

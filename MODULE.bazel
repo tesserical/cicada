@@ -34,7 +34,7 @@ oci.pull(
     image = "gcr.io/distroless/base",
     platforms = [
         "linux/amd64",
-        "linux/arm64",
+        "linux/arm64/v8",
     ],
     tag = "latest",
 )
@@ -49,7 +49,7 @@ oci.pull(
 )
 
 # For each oci.pull call, repeat the "name" here to expose them as dependencies.
-use_repo(oci, "distroless_base", "distroless_base_linux_amd64", "distroless_base_linux_arm64", "go_alpine", "go_alpine_linux_amd64", "go_alpine_linux_arm64")
+use_repo(oci, "distroless_base", "distroless_base_linux_amd64", "distroless_base_linux_arm64_v8", "go_alpine", "go_alpine_linux_amd64", "go_alpine_linux_arm64")
 
 # - Misc -
 # Bring the host_platform extension into scope

@@ -1,0 +1,29 @@
+load("@rules_oci//oci:defs.bzl", "oci_image", "oci_load", "oci_push")
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+
+pkg_tar(
+    name = "grpc_server_layer",
+    srcs = ["//service/chat/cmd/grpc-server"],
+    mode = "0755",
+)
+
+oci_image(
+    name = "grpc_server_image",
+    base = "@distroless_base",
+    entrypoint = ["/grpc-server"],
+    tars = [":grpc_server_layer"],
+)
+
+oci_load(
+    name = "grpc_server_image_load",
+    image = ":grpc_server_image",
+    repo_tags = [
+        "tesserical/cicada-chat-server:latest",
+    ],
+)
+
+filegroup(
+    name = "grpc_server.tar",
+    srcs = [":grpc_server_image_load"],
+    output_group = "tarball",
+)

@@ -1,0 +1,9 @@
+commonLabels:
+  app: chat
+  release: "{{ .Release.Name }}"
+  chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  environment: local
+
+auth:
+  existingSecret: "chat-valkey-secret"
+  existingSecretPasswordKey: password
