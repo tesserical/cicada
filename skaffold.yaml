@@ -5,7 +5,7 @@ metadata:
   name: cicada
 
 requires:
-  - path: service/shared/nats
+  - path: shared/infrastructure/nats
   - path: service/chat
 
 profiles:
