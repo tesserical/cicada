@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package tesserical.cicada.api.v1;
 
-option go_package = "github.com/tesserical/tesserical/shared/lib/go/internalapi/cicadav1pb";
+option go_package = "github.com/tesserical/tesserical/shared/lib/go/internalapi/cicadaapiv1pb";
 
 import "google/protobuf/empty.proto";
 
